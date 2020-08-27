@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="css/header.css">
+		<link rel="stylesheet" type="text/css" href="css/footer.css">
+		<link rel="stylesheet" type="text/css" href="css/introduce.css">
+	</head>
+	<body>
+		<header></header>
+		<div class="text-inner">
+			<h2>FILA简介</h2>
+			<p>百年运动时尚品牌FILA创建于1911年意大利Biella小镇，是FILA兄弟创立的一家纺织和针织的服装企业。上世纪七十年代，为配合多元化发展，FILA转向运动服饰，先后开发了网球、高尔夫、健身、滑雪、登山、篮球等系列。FILA产品现行销于意大利、英国、德国、法国、美国、中国、日本、韩国、巴西、俄罗斯等三十多个国家。</p>
+			<p>1982年FILA兄弟在中国成功注册FILA商标， 2009年安踏集团收购FILA品牌在中国大陆、中国香港、中国澳门（仅限商业谈判结果，不包括中国台湾，以下简称FILA中国）的商标运营权，并于2017年收购新加坡地区的商标运营权。收购后，FILA产品、销售、明星等资源方面均坚持独立运作，将运动、生活、时尚结合起来，专注于时尚运动。</p>
+			<p>定位于高级运动时装，FILA中国秉承“LIVE YOUR ELEGANCE身悦动 心优雅”的品牌理念，颠覆传统运动形象，以意式优雅风格传递百年不变的热情与活力，并获得了中国驰名商标的美誉。此外，FILA中国坚持国际化视野运营策略，与FILA全球运营团队保持紧密联系，且在全球拥有多个海外设计中心，最大化整合全球优质设计资源，同时，每年还会从国外进口FILA全球热销商品以满足国内消费者需求。</p>
+			<p>在产品质量把控上，FILA根据国家行业标准建立了严格的内控质量管理体系，从供应商管理、设计开发质量管理、生产质量管理、储运质量管理、销售质量管理全方位无死角的全过程管理，以满足不断提升的消费者体验需求。</p>
+		</div>
+		<footer></footer>
+	</body>
+</html>
+<script src="jQuery.js"></script>
+<script>
+	$("header").load("header.html",function(){
+		let ss = sessionStorage;
+			if(ss.getItem("name") != null){
+				$(".logok a").html("已登入");
+			}
+		});
+	$("footer").load("footer.html");
+</script>

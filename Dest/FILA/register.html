@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="css/footer.css">
+		<link rel="stylesheet" type="text/css" href="css/register.css">
+	</head>
+	<body>
+		<div class="register">
+			<div class="user-register">
+				<h5>
+					<span>欢迎加入</span>
+					<img src="img/index/logo.png" alt="">
+				</h5>
+				<form action="">
+					<lable class="lablebox-user">
+						<input type="text" id="username" placeholder="手机号码">
+					</lable>
+					<!-- <lable class="lablebox-user"> -->
+					<input type="password" id="pwd" placeholder="登录密码">
+					<!-- </lable> -->
+					<!-- <lable class="lablebox-capt"> -->
+					<input type="text" id="iden" placeholder="图片验证码"><span class="bo"></span><br><br>
+					<!-- </lable> -->
+					<label class="lablebox-agree">
+						<input type="checkbox" class="must">我已充分阅读、理解并接受<a href="">隐私政策</a>的全部内容<br><br>
+					</label>
+					<span class="show"></span>
+					<input type="button" value="确认" class="submit-button">
+					<input type="button" value="确认" id="submit-button">
+				</form>
+				<p><a href="login.html">已是会员？立即登录</a></p>
+			</div>
+		</div>
+		<footer></footer>
+	</body>
+</html>
+<script src="jQuery.js"></script>
+<script src="js/ajax.js"></script>
+<script type="text/javascript">
+	$("footer").load("footer.html");
+
+	let flagPhone = null;
+	let flagPwd = null;
+	let flagCheck = null;
+
+	$("#username").blur(function() {
+		let regPhone = /^1(3|5|8|7)\d{9}$/;
+		if (!regPhone.test($("#username").val())) {
+			$(".show").html("请输入正确的手机号码");
+			flagPhone = false;
+		} else {
+			$(".show").html(" ");
+			flagPhone = true;
+		}
+	})
+	$("#iden").blur(function() {
+		if ($("#iden").val() == $(".bo").html()) {
+			$(".show").html(" ");
+			flagCheck = true;
+		} else {
+			$(".show").html("验证码输入错误");
+			flagCheck = false;
+		}
+	})
+	$("#pwd").blur(function() {
+		let regPwd = /^[a-zA-Z0-9].{7,}/;
+		if (!regPwd.test($("#pwd").val())) {
+			$(".show").html("!请输入正确的密码");
+			flagPwd = false;
+		} else {
+			$(".show").html(" ");
+			flagPwd = true;
+		}
+	})
+
+
+
+
+	//随机生成验证码
+	function guess() {
+		let str = "0123456789abcdefghijklmnopqrstuvwxyz";
+		let sx = "";
+
+		for (let i = 1; i <= 4; i++) {
+			let img = str.charAt(Math.round(Math.random() * str.length));
+			sx += img;
+		}
+		$(".bo").html(sx);
+	}
+	guess();
+
+	$(".bo").click(function() {
+		guess();
+	})
+
+
+
+	$(".submit-button").click(function() {
+		
+		
+		
+		if (flagPhone && flagCheck && $(".must").prop('checked')) {
+			$("#pwd").css({
+				display: "block"
+			})
+			$(".lablebox-agree").css({
+				display: "none"
+			})
+			guess();
+			$("#iden").val("");
+			$("#submit-button").css({display: "block"});
+			$(this).css({display: "none"});
+			$(".show").html("");
+		}else if (!$(".must").prop('checked')) {
+			$(".show").html("!请先阅读并接受隐私政策");
+		}else{
+			$(".show").html("!用户名或者密码不能为空");
+		}
+	})
+
+
+	$("#submit-button").click(function() {
+		
+		if (flagPhone && flagPwd && flagCheck) {
+			new MyAjax({
+				"type": "get",
+				"url": "php/register.php",
+				"isAsyn": true,
+				"data": "userphone=" + $("#username").val() + "&pwd=" + $("#pwd").val(),
+				"callBack": fun
+			}).ajax();
+		}else{
+			$(".show").html("!密码或者验证码不能为空");
+		}
+	})
+
+	function fun(resText) {
+		if (resText == "1") {
+			$(".show").html("注册成功，即将为您跳转至登录页面");
+			setTimeout(function() {
+				location.href = "login.html";
+			}, 2000)
+		} else {
+			$(".show").html("!用户名已经被注册，请重新输入");
+		}
+	}
+</script>

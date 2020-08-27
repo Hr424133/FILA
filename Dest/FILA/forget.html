@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style>
+			.reset{
+				width: 400px;
+				position: absolute;
+				left: 35%;top: 20%;
+			}
+			.user-reset{
+				width: 400px;
+				box-sizing: border-box;
+			}
+			.user-reset h5{
+				font-size: 20px;
+				font-weight: normal;
+				margin-bottom: 20px;
+				text-align: center;
+			}
+			.user-reset #username{
+				width: 90%;
+				height: 30px;
+				outline: none;
+				border: 1px solid #888;
+			}
+			.user-reset #pwd{
+				width: 40%;
+				height: 30px;
+				outline: none;
+				border: 1px solid #888;
+				float: left;
+			}
+			.user-reset .reset-button{
+				background-color: #03234C;
+				height: 50px;
+				width: 90%;
+				outline: none;
+				color: #fff;
+				margin-bottom: 20px;
+			}
+			.bo {
+				width: 80px;
+				height: 30px;
+				border: 1px solid #888;
+				display: inline-block;
+				margin-left: 30px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="reset">
+			<div class="user-reset">
+				<h5>
+					<span>重置密码</span>
+				</h5>
+				<form action="">
+					<input type="text" name="user" id="username" placeholder="手机号码"><br><br>
+					<input type="text" name="pwd" id="pwd" placeholder="图片验证码"><span class="bo"></span><i id="box"></i><br><br>
+					<input type="submit" value="确认" class="reset-button">
+				</form>
+			</div>
+		</div>
+		<footer></footer>
+	</body>
+</html>
+<script src="jQuery.js"></script>
+<script type="text/javascript">
+	function guess() {
+		let str = "0123456789abcdefghijklmnopqrstuvwxyz";
+		let sx = "";
+	
+		for (let i = 1; i <= 4; i++) {
+			let img = str.charAt(Math.round(Math.random() * str.length));
+			sx += img;
+		}
+		$(".bo").html(sx);
+	}
+	guess();
+	
+	$(".bo").click(function() {
+		guess();
+	})
+</script>

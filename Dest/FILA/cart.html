@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="css/header.css">
+		<link rel="stylesheet" type="text/css" href="css/cart.css">
+	</head>
+	<body>
+		<header></header>
+		<div class="page-containter">
+			<div class="cart-to-login">
+				<h4>您还没有登入</h4>
+				<p>立即去<a href="login.html">登入</a>或者<a href="register.html">注册</a>FILA会员</p>
+			</div>
+			<div class="cart-main">
+				<h3 class="cart-title">
+					<span>我的购物车</span>
+					<i>共<b id="total-num">0</b>件</i>
+				</h3>
+				<div class="cart-top" style="display: none;">
+					<!-- <label class="checkbox-label checkbox-all"> -->
+					<input type="checkbox" class="checkbox-input-all">
+					<i></i>
+					<span>全选</span>
+					<!-- </label> -->
+				</div>
+				<div class="nothing" style="margin-left: 400px;margin-top: 40px; color: #666;">
+					<p><img src="https://fila-image01.obs.myhwclouds.com/theme_fl/images/icons/cart-empty.svg" width="100px" height="100px" style="margin-left: 120px;"></p>
+					您的购物车中没有任何商品，马上去<a href="main.html" style="border-bottom: 1px solid #888;display: inline-block;margin-bottom: 5px;">挑选商品</a>
+				</div>
+				<table class="cart-table">
+					<tbody>
+						<!-- <tr class="goods-item">
+						<td class="td-check">
+							<input type="checkbox" class="checkbox-input">
+							<i></i>
+						</td>
+						<td class="td-img">
+							<a href=""><img src="img/main/1%20(86).jpg" alt=""></a>
+						</td>
+						<td class="td-infos">
+							<div class="td-infos-top clearfix">
+								<div class="fl">
+									<h5>提包</h5>
+									<p><span>颜色:<span>蜜白</span>;尺码:<span>XS</span></span></p>
+								</div>
+								<div class="fr">
+									<span class="infos-price">￥<b class="single-price">408.00</b></span>
+									<span>小计:￥<em class="xiaojiji">0</em></span>
+								</div>
+							</div>
+							<div class="td-infos-bot clearfix">
+								<p class="fl">
+									<span>数量:</span>
+									<button class="num-minus">-</button>
+									<input type="text" class="num-input" value="1">
+									<button class="num-plus">+</button>
+								</p>
+								<p class="fr">
+									<span class="delete-one">删除</span>
+								</p>
+							</div>
+						</td>
+					</tr> -->
+					</tbody>
+				</table>
+			</div>
+			<div class="cart-foot">
+				<div class="sum-main clearfix w-1280">
+					<div class="sum-infos fl clearfix">
+						<div class="sum-operate fl">
+							<!-- <label class="checkbox-label checkbox-all"> -->
+							<input type="checkbox" class="checkbox-input-all">
+							<!-- <i></i> -->
+							<span>全选商品</span>
+							<!-- </label> -->
+							<a href="" class="delete-multi">删除商品</a>
+						</div>
+						<div class="sum-totalprice fr">
+							<span>总价</span>
+							<span class="price">￥<b id="total-price">0.0</b></span>
+						</div>
+					</div>
+					<div class="sum-to-settle fl">
+						<a class="btn-to-settle">结算</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</body>
+</html>
+<script src="jQuery.js"></script>
+<script src="js/ajax.js"></script>
+<script src="js/cart.js"></script>
+<script>
+	$("header").load("header.html",function(){
+		let ss = sessionStorage;
+		console.log(ss.getItem("name"));
+		if(ss.getItem("name") != null){
+			$(".cart-to-login").css({
+				display:"none"
+			});
+		}
+		if(ss.getItem("name") != null){
+			$(".logok a").html("已登入");
+		}
+	});
+
+
+	// $(".checkbox-input-all").click(function() {
+	// 	var isChecked = $(this).prop('checked');
+	// 	$(".checkbox-input").prop('checked', isChecked);
+	// 	$(".checkbox-input-all").prop('checked', isChecked);
+
+	// })
+
+
+
+	let c = new Cart();
+	c.eventbind();
+	c.check();
+
+	
+
+	
+	new MyAjax({
+		"type": "get",
+		"url": "php/cart.php",
+		"isAsyn": true,
+		"data": "",
+		"callBack": fun
+	}).ajax();
+
+
+	function fun(resText) {
+		// console.log( resText);
+
+		let arr = resText.split("<br/>");
+		for (let i = 0; i < arr.length - 1; i++) {
+			let arr1 = arr[i].split(",");
+
+			// console.log(arr1);
+			let str = `<tr class="goods-item">
+						<td class="td-check">
+							<!-- <label class="checkbox-label checkbox-one"> -->
+							<input type="checkbox" class="checkbox-input">
+							<i></i>
+							<!-- </label> -->
+						</td>
+						<td class="td-img">
+							<a href="" style='background-image:${arr1[1]};background-size:50px 50px'></a>
+						</td>
+						<td class="td-infos">
+							<div class="td-infos-top clearfix">
+								<div class="fl">
+									<h5>${arr1[2]}</h5>
+									<p><span>颜色:<span>${arr1[3]}</span>;尺码:<span>${arr1[4]}</span></span></p>
+								</div>
+								<div class="fr">
+									<span class="infos-price">￥<b class="single-price">${arr1[6]}</b></span>
+									<span>小计:￥<em class="xiaojiji">${arr1[6]}</em></span>
+								</div>
+							</div>
+							<div class="td-infos-bot clearfix">
+								<p class="fl">
+									<span>数量:</span>
+									<button class="num-minus">-</button>
+									<input type="text" class="num-input" value="${arr1[5]}">
+									<button class="num-plus">+</button>
+								</p>
+								<p class="fr">
+									<span class="delete-one">删除</span>
+								</p>
+							</div>
+						</td>
+					</tr>`
+
+			let tbody = document.querySelector("tbody");
+			tbody.innerHTML += str;
+			c.eventbind();
+		}
+		if($("tr").length == 0){
+			$(".nothing").css({
+				display:"block"
+			});
+		}else{
+			$(".nothing").css({
+				display:"none"
+			});
+			$(".cart-top").css({
+				display:"block"
+			});
+			$("#total-num").html($("tr").length);
+		}
+	}
+	
+	
+</script>

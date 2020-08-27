@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="css/footer.css">
+		<link rel="stylesheet" type="text/css" href="css/login.css">
+	</head>
+	<body>
+		<div class="login">
+			<div class="user-login">
+				<h5>
+					<span>欢迎登录</span>
+					<img src="img/index/logo.png" alt="">
+				</h5>
+				<div class="p">
+					<h6 class="account">账号密码登录</h6>
+					<h6 class="message">短信快捷登录/注册</h6>
+				</div>
+				<form action="">
+					<input type="text" id="username" placeholder="手机号码"><br><br>
+					<div class="change-account">
+						<input type="password" id="pwd" placeholder="登录密码"><br><br>
+					</div>
+					<div class="change-message">
+						<input type="text" id="code" placeholder="请输入图片验证码"><br><br>
+						<input type="text" name="smscode" id="verify" placeholder="短信验证码"><i>获取验证码</i><br><br>
+					</div>
+					<span class="show"></span>
+					<input type="button" value="立即登录" class="login-button">
+				</form>
+				<p><a href="forget.html">忘记密码?</a></p>
+			</div>
+			<div class="join">
+				<h2>加入FILA V.I.P.</h2>
+				<p>注册成为会员并完善个人信息，即可享受:</p>
+				<ul>
+					<li>积分可在官网购物时作为现金抵扣；</li>
+					<li>官网、门店消费共享会员权益和积分累计；</li>
+					<li>即时收到优惠及新品发布信息，品牌活动邀约</li>
+				</ul>
+				<a href="register.html" title="立即注册">立即注册</a>
+			</div>
+		</div>
+		<footer></footer>
+	</body>
+</html>
+<script src="jQuery.js"></script>
+<script src="js/ajax.js"></script>
+<script type="text/javascript">
+	$("footer").load("footer.html");
+	$(".account").click(function() {
+		$(this).css({
+			borderBottom: "2px solid blue"
+		});
+		$(".message").css({
+			borderBottom: "2px solid transparent"
+		});
+		$(".change-message").css({
+			display: "none"
+		});
+		$(".change-account").css({
+			display: "block"
+		});
+	})
+	$(".message").click(function() {
+		$(this).css({
+			borderBottom: "2px solid blue"
+		});
+		$(".account").css({
+			borderBottom: "2px solid transparent"
+		});
+		$(".change-message").css({
+			display: "block"
+		});
+		$(".change-account").css({
+			display: "none"
+		});
+	})
+
+
+	let flagPhone = null;
+	let flagPwd = null;
+
+	$("#username").blur(function() {
+		let regPhone = /^1(3|5|8|7)\d{9}$/;
+		if (!regPhone.test($("#username").val())) {
+			$(".show").html("!请输入正确的手机号码");
+			flagPhone = false;
+		} else {
+			$(".show").html(" ");
+			flagPhone = true;
+		}
+	})
+	$("#pwd").blur(function() {
+		let regPwd = /^[a-zA-Z0-9].{7,}/;
+		if (!regPwd.test($("#pwd").val())) {
+			$(".show").html("!请输入正确的密码");
+			flagPwd = false;
+		} else {
+			$(".show").html(" ");
+			flagPwd = true;
+		}
+	})
+
+
+
+	$(".login-button").click(function() {
+		if (flagPhone && flagPwd) {
+			new MyAjax({
+				"type": "get",
+				"url": "php/login.php",
+				"isAsyn": true,
+				"data": "userphone=" + $("#username").val() + "&pwd=" + $("#pwd").val(),
+				"callBack": fun
+			}).ajax();
+		}else{
+			$(".show").html("!请输入手机号码或密码");
+		}
+
+	})
+
+
+	let ss = sessionStorage;
+
+	
+	function fun(resText) {
+		if (resText == "1") {
+			$(".show").html("用户不存在");
+			// $("#username").val()="";
+			// $("#pwd").val()="";
+		} else if (resText == "0") {
+			$(".show").html("登录成功,2秒后即将跳转");
+			
+			ss.setItem("name",$('#username').val());
+			console.log(ss.getItem("name"));
+			setTimeout(function() {
+				window.history.back(-1);
+			}, 2000)
+		} else if (resText == "2") {
+			$(".show").html("用户名或者密码输入错误");
+		}
+	}
+</script>

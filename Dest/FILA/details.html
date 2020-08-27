@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="css/header.css">
+		<link rel="stylesheet" type="text/css" href="css/footer.css">
+		<link rel="stylesheet" type="text/css" href="css/details.css">
+	</head>
+	<body>
+		<header></header>
+		<div class="pro-main">
+			<div class="pro-view fl">
+				<a href=""></a>
+				<ul>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+				<a href="" class="small-next"></a>
+			</div>
+			<div class="pro-small-box fl">
+				<div class="mask"></div>
+			</div>
+			<div class="pro-big-box"></div>
+			<div class="pro-info fl">
+				<h3 class="goods-name"></h3>
+				<p class="goods-sn">款号：F12W034123F</p>
+				<p class="goods-price">￥<b></b></p>
+				<div class="promos">
+					<p class="promos-title fl">促销</p>
+					<p class="promos-content">
+						<span>[免运费]全场免运费</span>
+						<span>红卡及以上会员9折</span>
+					</p>
+				</div>
+				<div>
+					<p class="goods-color">颜色：<span>跟随图片</span></p>
+					<ul class="color-list">
+						<li class="color-code"></li>
+						<li class="color-code"></li>
+						<li class="color-code"></li>
+						<li class="color-code"></li>
+					</ul>
+					<p class="goods-size">尺码：<span></span></p>
+					<ul class="size-list">
+						<li class="size-code"></li>
+						<li class="size-code"></li>
+						<li class="size-code"></li>
+						<li class="size-code"></li>
+						<li class="size-code"></li>
+						<li class="size-code"></li>
+						<li class="size-code"></li>
+						<li class="size-code"></li>
+					</ul>
+					<div class="infos">
+						<p class="box-label fl">购买数量<em></em></p>
+						<p class="pro-num">
+							<button class="num-ops">-</button>
+							<input type="text" class="num-input" value="1">
+							<button class="num-ops">+</button>
+						</p>
+					</div>
+					<div class="goods-btns">
+						<p class="btn-addcart fl">加入购物车</p>
+						<p class="btn-tobuy">立即购买</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="pro-details" style="padding-top: 150px;">
+			<img src="img/details/mustknow.jpg">
+			<img src="img/details/washing.jpg">
+			<img src="img/details/fila.jpg">
+		</div>
+		<footer></footer>
+	</body>
+</html>
+<script src="jQuery.js"></script>
+<script src="js/MF.js"></script>
+<script type="text/javascript">
+	$("header").load("header.html",function(){
+		let ss = sessionStorage;
+			if(ss.getItem("name") != null){
+				$(".logok a").html("已登入");
+			}
+		});
+	$("footer").load("footer.html");
+	
+	//获取商品页面传递过来的id
+	var currentUrl = window.location.href; 
+	var urlId = currentUrl.split("?id=");
+	// console.log(urlId[1]);
+
+	//放大镜
+	let oSmallBox = document.getElementsByClassName("pro-small-box")[0];
+	let oBigBox = document.getElementsByClassName("pro-big-box")[0];
+	let oMask = document.getElementsByClassName("mask")[0];
+
+
+
+	$(".color-code").click(function() {
+		$(".pro-small-box").css({
+			backgroundImage: $(this).css("backgroundImage")
+		});
+		$(".pro-big-box").css({
+			backgroundImage: $(this).css("backgroundImage")
+		});
+		$(this).css({
+			border: "1px solid #eee"
+		}).siblings($(this)).css({
+			border: "0"
+		})
+	})
+
+	$(".pro-view li").click(function() {
+		$(".pro-small-box").css({
+			backgroundImage: $(this).css("backgroundImage")
+		});
+		$(".pro-big-box").css({
+			backgroundImage: $(this).css("backgroundImage")
+		});
+		$(this).css({
+			border: "1px solid #333"
+		}).siblings($(this)).css({
+			border: "0"
+		})
+	})
+
+
+	$(".size-code").click(function() {
+		$(".goods-size span").html($(this).html());
+		$(this).css({
+			border: "1px solid #333"
+		}).siblings($(this)).css({
+			border: "0"
+		})
+	})
+
+
+	//尺码有值后才能点击加入购物车
+	$(".btn-addcart").click(function() {
+		if ($(".goods-size span").html() != "") {
+			$.ajax({
+				url: "php/details.php",
+				type: "get",
+				data: {
+					si: $(".pro-small-box").css("backgroundImage"),
+					name: $(".goods-name").html(),
+					price: $(".goods-price b").html(),
+					color: $(".goods-color span").html(),
+					size: $(".goods-size span").html(),
+					num: $(".num-input").val()
+
+				},
+				success: function(resText) {
+					console.log(resText);
+				}
+			})
+		} else {
+			alert("请选择尺码");
+		}
+	})
+
+
+
+
+	$.ajax({
+		url: "php/main.php",
+		type: "get",
+		data: "",
+		success: function(resText) {
+			let arr = resText.split("<br/>");
+			//arr1数据库中获取到的数据转成数组
+			for(let i=0;i<arr.length-1;i++){
+				let arr1 = arr[i].split(",");
+				if(urlId[1] == arr1[0]){
+					$(".pro-small-box").css({
+						backgroundImage: "url(img/main/" + arr1[1] + ")"
+					})
+					$(".pro-big-box").css({
+						backgroundImage: "url(img/main/" + arr1[1] + ")"
+					})
+					
+					$('.goods-name').html(arr1[2]);
+					$('.goods-price b').html(arr1[4]);
+					
+					
+
+					//ar1[3]小图路径
+					let ar1 = arr1[3].split(";");
+					for (let i = 0; i < $(".color-code").length; i++) {
+						$(".color-code").eq(i).css({
+							backgroundImage: "url(img/main/" + ar1[i] + ")",
+							backgroundSize: "80px 80px"
+						})
+					}
+					for (let i = 0; i < $(".pro-view li").length; i++) {
+						$(".pro-view li").eq(i).css({
+							backgroundImage: "url(img/main/" + ar1[i] + ")",
+							backgroundSize: "50px 50px"
+						})
+					}
+					
+					//ar1[5]获取尺码
+					let ar2 = arr1[5].split(";");
+					for(let i = 0; i < $(".size-code").length; i++){
+						$(".size-code").eq(i).html(ar2[i])
+					}
+					
+				}
+			}
+		}
+	})
+
+	let mf = new MF(oSmallBox, oBigBox, oMask);
+	mf.eventbind();
+</script>
